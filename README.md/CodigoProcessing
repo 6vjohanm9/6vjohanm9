@@ -1,0 +1,438 @@
+
+import processing.serial.*;
+
+Serial myPort; //
+PImage symbolImage1; // 
+PImage symbolImage2; // 
+PImage symbolImage3; //
+PImage symbolImage4; // 
+
+PImage symbol_CR1; //
+PImage symbol_CR2; //
+PImage symbol_CR3; // 
+PImage symbol_CR4; //
+
+PImage symbolImageR1; //
+PImage symbolImageR2; //
+PImage symbolImageR3; // 
+PImage symbolImageR4; //
+
+PImage symbolImageF1; //
+PImage symbolImageF2; //
+PImage symbolImageF3; // 
+PImage symbolImageF4; //
+
+PImage Columna_Linea; //
+
+PImage Linea_Pos; //
+
+PImage Imagen_Vacia_500_500;//
+
+PImage Imagen_Blanca_500_500;//
+
+PImage Fondo_Gris;
+
+PImage Display_PLC;
+
+PImage Linea_Conexion;
+
+PImage Linea_Conexion_90;
+
+PImage Diapos_2; //
+
+int imageSize = 150; // Tamaño de los simbolos e imagenes
+int currentSymbol = 0; // Variable para definirlo a 0
+int currentSpecialSymbol = 0;
+
+int posX = 100; // Posición X inicial
+int posY = 100; // Posición Y inicial
+
+int posXD = 800; // Posición X inicial (Crearemos otra posicion inicial que sera-
+int posYD = 100; // Posición Y inicial la que se mostrara en el display de la interfaz)
+                 // necesitamos agregar esta posicion al stepsize y lo que hace falta
+int direction = 0;
+
+int up;
+int down;
+int left;
+int right;
+
+
+void setup() 
+{
+  
+  size(1500, 1000);
+  
+  myPort = new Serial(this, "COM9", 9600);
+  
+  symbolImage1 = loadImage("symbolB1.png");
+  symbolImage1.resize(imageSize, imageSize);
+  symbolImage2 = loadImage("symbolB2.png");
+  symbolImage2.resize(imageSize, imageSize);
+  symbolImage3 = loadImage("symbolB3.png");
+  symbolImage3.resize(imageSize, imageSize);
+  symbolImage4 = loadImage("symbolB4.png");
+  symbolImage4.resize(imageSize, imageSize);
+  
+  symbol_CR1 = loadImage("symbol_CR1.png");
+  symbol_CR1.resize(imageSize, imageSize);
+  symbol_CR2 = loadImage("symbol_CR2.png");
+  symbol_CR2.resize(imageSize, imageSize);
+  symbol_CR3 = loadImage("symbol_CR3.png");
+  symbol_CR3.resize(imageSize, imageSize);
+  symbol_CR4 = loadImage("symbol_CR4.png");
+  symbol_CR4.resize(imageSize, imageSize);  
+  
+  symbolImageR1 = loadImage("symbolR1.png");
+  symbolImageR1.resize(imageSize, imageSize);
+  symbolImageR2 = loadImage("symbolR2.png");
+  symbolImageR2.resize(imageSize, imageSize);
+  symbolImageR3 = loadImage("symbolR3.png");
+  symbolImageR3.resize(imageSize, imageSize);
+  symbolImageR4 = loadImage("symbolR4.png");
+  symbolImageR4.resize(imageSize, imageSize);
+  
+  symbolImageF1 = loadImage("symbolF1.png");
+  symbolImageF1.resize(imageSize, imageSize);
+  symbolImageF2 = loadImage("symbolF2.png");
+  symbolImageF2.resize(imageSize, imageSize);
+  symbolImageF3 = loadImage("symbolF3.png");
+  symbolImageF3.resize(imageSize, imageSize);
+  symbolImageF4 = loadImage("symbolF4.png");
+  symbolImageF4.resize(imageSize, imageSize);
+  
+  
+  
+  Columna_Linea = loadImage("Columna_Linea.png");
+  Columna_Linea.resize(100, 1000); 
+  
+  Linea_Pos = loadImage("Linea_Pos.png");
+  Linea_Pos.resize(100, 100);   
+  
+  Imagen_Vacia_500_500 = loadImage("Imagen_Vacia_500_500.png");
+  Imagen_Vacia_500_500.resize(100, 100);      
+  
+  Imagen_Blanca_500_500 = loadImage("Imagen_Blanca_500_500.png");
+  Imagen_Vacia_500_500.resize(100, 100);  
+  
+  Fondo_Gris = loadImage("Fondo_Gris.png");
+  Fondo_Gris.resize(600, 749);  
+  
+  Display_PLC = loadImage("Display_PLC.png");
+  Display_PLC.resize(460, 310);  
+  
+  Linea_Conexion = loadImage("Linea_Conexion.png");
+  Linea_Conexion.resize(150, 150);    
+  
+  Linea_Conexion_90 = loadImage("Linea_Conexion_90.png");
+  Linea_Conexion_90.resize(150, 150);   
+  
+  Diapos_2 = loadImage("Diapos_2.png");
+  Diapos_2.resize(1400, 800);   
+  
+  noLoop();
+}
+
+void draw() 
+{
+  background(255);  
+  
+  image(Columna_Linea, 55,0);
+  image(Columna_Linea, 650,0);
+  
+  image(Fondo_Gris, 780,-7);  
+  image(Display_PLC,850,40);
+  
+  if (currentSymbol == 20) 
+  {
+    image(Diapos_2, 0,-50);
+  }
+  
+/*  if (currentSymbol==7&&up==1)
+  {
+   image(Linea_Conexion_90, posX, posY);
+  }  */    
+  
+  if (currentSymbol == 5) 
+  {
+    image(Imagen_Vacia_500_500, posX, posY);
+    //fill(255);
+    //rect(posX, posY, 50, 50);
+    //Borras imagen de esta posicion image(symbolImage1, posX, posY);
+  }
+    else if (currentSymbol == 6) 
+  {
+    //image(symbolImage2, posX, posY);
+  } 
+    else if (currentSymbol == 7&&up==0&&down==0) 
+  {
+    image(Linea_Conexion, posX, posY);
+  }
+    else if (currentSymbol == 7 && up==1)
+  {
+    image(Linea_Conexion_90, posX, posY);
+  }
+  else if (currentSymbol == 7 && down==1)
+  {
+    image(Linea_Conexion_90, posX, posY);
+  }
+  else if (currentSymbol == 8) 
+  {
+    image(symbolImage1, posX, posY);
+  }  
+  else if (currentSymbol == 24) 
+  {
+    image(symbolImage1, posX, posY);
+  }    
+  else if (currentSymbol == 25) 
+  {
+    image(symbol_CR1, posX, posY);
+    //if(contadorOKpos==2){if(currentsymbol26
+  }  
+  else if (currentSymbol == 33) 
+  {
+    image(symbolImage1, posX, posY);
+  }  
+  else if (currentSymbol == 34) 
+  {
+    image(symbolImage2, posX, posY);
+  }
+  else if (currentSymbol == 35) 
+  {
+    image(symbolImage3, posX, posY);
+  }
+  else if (currentSymbol == 36) 
+  {
+    image(symbolImage4, posX, posY);
+  }  
+  
+  
+  //Botones especiales
+  
+  
+  // Muestra los datos
+  fill(0);
+  textSize(18);
+  text("Posición X: " + posX, 20, 20);
+  text("Posición Y: " + posY, 20, 40); 
+  text("Symbol= " + currentSymbol, 160, 20);
+  //text("SpSymbol= " + currentSpecialSymbol, 140, 20);
+  text("up= " + up,20, 80); 
+  text("down= " + down,20, 100);
+  text("left= " + left,20, 120);
+  text("right= " + right,20, 140);
+  //text("Especials= " + EspecialsSymbol, 20, 160);
+  
+
+
+    if(posX>=0&&posY>=0&&currentSymbol==0||currentSymbol==5||currentSymbol==6||currentSymbol==10)  //&&boton no se presiona o algo asi para dehacernos de la linea cuando presionemos ok o algo asi
+     {
+      image(Linea_Pos, posX, posY);
+     }     
+}
+
+void serialEvent(Serial myPort) 
+{
+   if (myPort.available() > 0) 
+   {
+    int value = myPort.read();    
+    if (value >= 1 && value <= 45) 
+    {
+      // Si se presionó uno de los botones de navegación
+      if (value >= 1 && value <= 4) 
+      {
+        String direction = getDirection(value);
+        println("Botón " + direction + " presionado.");
+        moveSymbol(value);
+      } 
+      else if (value >= 5 && value <= 8) 
+      {
+        String symbol = getSymbol(value);
+        println("Botón Symbol " + symbol + " presionado.");
+        currentSymbol = value;
+      }
+      else if (value >= 20 && value <= 23) 
+      {
+        String symbol = getSymbol(value);
+        println("Botón Symbol " + symbol + " presionado.");
+        currentSymbol = value;
+      }
+      
+      else if (value >= 24 && value <= 26) 
+      {
+        String symbol = getSymbol(value);
+        println("Botón Symbol " + symbol + " presionado.");
+        currentSymbol = value;
+      } 
+      
+      else if (value >= 33 && value <= 36) 
+      {
+        String symbol = getSymbol(value);
+        println("Botón Symbol " + symbol + " presionado.");
+        currentSymbol = value;
+      }       
+      
+      /*else if (value >= 20 && value <= 25) 
+      {
+        String specialSymbol = getSpecialSymbol(value);
+        println("Botón Especial " + specialSymbol + " presionado.");
+        currentSpecialSymbol = value;
+        currentSymbol = 0;
+      } */
+    }
+  }  
+  redraw();
+}
+
+void moveSymbol(int direction) 
+{
+  int stepSize = 150; // Tamaño del paso para mover el símbolo
+   if(currentSymbol==8||currentSymbol==24||currentSymbol==25||currentSymbol==33||currentSymbol==34||currentSymbol==35||currentSymbol==36)//if(currentSymbol==7 || currentSymbol==8)
+   {
+     return;
+   }
+    if (direction == 1) 
+    {
+      // "Up"
+      posY -= stepSize;
+      up=1;
+      down=0;
+      left=0;
+      right=0;
+    } 
+    else if (direction == 2) 
+    {
+      // "Down"
+      posY += stepSize;
+      up=0;
+      down=1;
+      left=0;
+      right=0;
+    } 
+    else if (direction == 3) 
+    {
+      // "Left"
+      posX -= stepSize;
+      up=0;
+      down=0;
+      left=1;
+      right=0;
+    } 
+    else if (direction == 4) 
+    {
+      // "Right"
+      posX += stepSize;
+      up=0;
+      down=0;
+      left=0;
+      right=1;
+    }
+    
+    //limite de coordenadas
+    
+    if(posX == -50)
+    {
+      posX = posX + 50;
+      delay(50);
+    }   
+    
+    if(posY == 50)
+    {
+      posY = posY + 50;
+      delay(50);
+    }
+    
+    if(posX == 0)
+    {
+      posX = 100;
+    }
+    
+    if(posY == -50)
+    {
+      posY = 100;
+    }
+     
+    if(posX == 700)
+    {
+      posX = 550;
+    }
+    
+    /*if(down==1)
+    {
+       image symbolB3
+    }*/
+    
+    redraw(); // Vuelve a dibujar la pantalla para actualizar la posición del símbolo
+   
+}
+
+String getDirection(int value) 
+{
+  switch (value) 
+  {
+    case 1:
+      return "Up";
+    case 2:
+      return "Down";
+    case 3:
+      return "Left";
+    case 4:
+      return "Right";
+    default:
+      return "Unknown";
+  }
+}
+
+String getSymbol(int value) 
+{
+  switch (value) 
+  {
+    case 5:
+      return "1";
+    case 6:
+      return "2";
+    case 7:
+      return "3";
+    case 8:
+      return "4";
+    case 20:
+      return "I";
+    case 21:
+      return "S";
+    case 22:
+      return "L";
+    case 23:
+      return "F";
+    case 24:
+      return "24";
+    case 25:
+      return "25";      
+    case 33:
+      return "33";
+    case 34:
+      return "34"; 
+    case 35:
+      return "35";
+    case 36:
+      return "36";       
+    default:
+      return "Unknown";
+  }
+}  
+/*String getSpecialSymbol(int value) 
+{
+  switch (value) 
+  {
+    case 20:
+      return "I";
+    case 21:
+      return "S";
+    case 22:
+      return "L";
+    case 23:
+      return "F";
+    default:
+      return "Unknown";
+  }   
+  
+}*/
